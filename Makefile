@@ -1,4 +1,4 @@
-CFLAGS = -std=c99 -Wall -O3 -Werror -lm
+CFLAGS = -std=c99 -Wall -O3 -lm 
 GCC = gcc $(CFLAGS)
 COMP = compress.o linked.o binary.o
 DECOMP = decompress.o linked.o binary.o
@@ -19,3 +19,5 @@ clean:
 	/bin/rm -f compress
 	/bin/rm -f decompress
 	/bin/rm -f *.o
+	/bin/rm -f *.compress
+	/bin/rm -f *.decompress
