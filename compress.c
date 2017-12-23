@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "compression.h"
+#include "compress.h"
 #include "linked.h"
-#include "tree.h"
+#include "binary.h"
 
 int main(int argc, char ** argv){
     if (argc != 2){
@@ -21,14 +21,14 @@ int main(int argc, char ** argv){
     long *asciiFreq = freqASCII(inFile);
 
     //pseudo end of file marker 
-    ascii[255]=1;
+    asciiFreq[255]=1;
     
     //create linked list of present ascii values by frequency appeared
     ListNode * head = NULL;
     for(int i=0; i<ASCII_SIZE; i++){
         if(asciiFreq[i] != 0){
             ListNode * newNode = createNode(asciiFreq[i],i);
-            insertNode(&head, newNode):
+            insertNode(&head, newNode);
         }
     }
     free(asciiFreq);
@@ -36,8 +36,8 @@ int main(int argc, char ** argv){
     //create binary tree from the LinkedList
     TreeNode * Root = buildTreeFromLL(head);
 
-    FILE * compressedFile = fopen(strcat(argv[1], ".compressed"), "wb");
-    if (outFile == NULL){
+    FILE * compressedFile = fopen(strcat(argv[1], ".compress"), "wb");
+    if (compressedFile == NULL){
         fprintf(stderr, "Error! Cannot write to compressed output file\nQuit\n");
         return EXIT_FAILURE;
     }
@@ -49,7 +49,8 @@ int main(int argc, char ** argv){
     
     //get table of compressed ascii values
     long * Table = malloc(sizeof(long)*ASCII_SIZE);
-    getTable(Table, Root, 0);
+    long Value = 0;
+    getTable(Table, Root, Value);
 
     rewind(inFile);
     int ch;
